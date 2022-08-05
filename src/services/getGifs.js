@@ -14,10 +14,11 @@ const searchGif = async query => {
     const data = await response.json();
 
     localStorage.setItem("lastSearch", query);
-
+    
     const gifs = data.data.map(gif => {
       const { id, title } = gif;
-      const { url } = gif.images.downsized_medium;
+      //const { url } = gif.images.downsized_medium;
+      const { url } = gif.images.fixed_height_downsampled;
 
       return { id, title, url };
     });

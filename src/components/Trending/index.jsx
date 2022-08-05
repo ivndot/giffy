@@ -10,7 +10,7 @@ function Trending() {
   }, []);
   
   return (
-    <section className="p-12">
+    <section className="p-12 pt-9">
       <p className="text-2xl font-semibold mb-3 text-center">Trending 🔥</p>
       <div className="text-center">
         {trendingTerm.map((term, idx) => (

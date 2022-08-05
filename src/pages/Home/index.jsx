@@ -1,11 +1,23 @@
 import React from "react";
 import GifsGrid from "../../components/GifsGrid";
+import Loader from "../../components/Loader";
+import FormSearch from "../../components/FormSearch";
+import { useSearchGifs } from "../../hooks/useSearchGifs";
+import Container from "../../components/Container";
 
 function Home() {
+  const query = localStorage.getItem("lastSearch") || "random";
+  // use custom hook to get the gifs from the API
+  const { gifs, loading } = useSearchGifs(query);
   return (
     <>
-      <p className="text-gray-500 text-xl font-serif font-extralight px-12 pb-3">Last search:</p>
-      <GifsGrid query={localStorage.getItem("lastSearch")} />
+      <FormSearch />
+      <Container>
+        <p className="text-gray-800 text-xl font-serif pb-3 tracking-widest uppercase font-extralight">
+          Last search:
+        </p>
+        {loading ? <Loader size={90} /> : <GifsGrid gifs={gifs} />}
+      </Container>
     </>
   );
 }
