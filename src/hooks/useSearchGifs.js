@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { GifsContext } from "../context/GifsContext";
 import { searchGif } from "../services/getGifs";
 
 /**
@@ -7,7 +8,7 @@ import { searchGif } from "../services/getGifs";
  * @returns An object that contains the array of gifs and the state of the loading
  */
 function useSearchGifs(query) {
-  const [gifs, setGifs] = useState([]);
+  const { gifs, setGifs } = useContext(GifsContext);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

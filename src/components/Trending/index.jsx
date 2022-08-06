@@ -8,7 +8,7 @@ function Trending() {
   useEffect(() => {
     getTrendingTerms().then(topics => setTrendingTerms(topics));
   }, []);
-  
+  console.log("render trending");
   return (
     <section className="p-12 pt-9">
       <p className="text-2xl font-semibold mb-3 text-center">Trending 🔥</p>
@@ -26,4 +26,4 @@ function Trending() {
   );
 }
 
-export default Trending;
+export default React.memo(Trending);
