@@ -1,29 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "wouter";
-import { getTrendingTerms } from "../../services/getGifs";
+import React, { Suspense } from "react";
+import { useIntersectionObserver } from "../../hooks/useIntersectionObserver";
+import Loader from "../Loader";
 
-function Trending() {
-  const [trendingTerm, setTrendingTerms] = useState([]);
+// import lazy for Trending component
+const Trending = React.lazy(() => import("./Trending"));
 
-  useEffect(() => {
-    getTrendingTerms().then(topics => setTrendingTerms(topics));
-  }, []);
-  console.log("render trending");
+function LazyTrending() {
+  const { show, elementRef } = useIntersectionObserver();
   return (
-    <section className="p-12 pt-9">
-      <p className="text-2xl font-semibold mb-3 text-center">Trending 🔥</p>
-      <div className="text-center">
-        {trendingTerm.map((term, idx) => (
-          <span key={idx}>
-            <Link href={`/search/${term}`}>
-              <a className="px-3 hover:underline ">{`${term}`}</a>
-            </Link>
-            {idx !== trendingTerm.length - 1 && <span>•</span>}
-          </span>
-        ))}
-      </div>
-    </section>
+    <div ref={elementRef}>
+      <Suspense fallback={<Loader size={50} />}>{show ? <Trending /> : <Loader size={50} />}</Suspense>
+    </div>
   );
 }
 
-export default React.memo(Trending);
+export default React.memo(LazyTrending);

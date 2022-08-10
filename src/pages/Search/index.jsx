@@ -9,7 +9,6 @@ function Search({ params }) {
   query = query || "random";
   // use custom hook to get the gifs from the API
   const { gifs, loading } = useSearchGifs(query);
-  console.log({ gifs, loading, render: "render" });
 
   if (!loading && gifs.length === 0)
     return (
