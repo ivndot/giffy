@@ -1,23 +1,26 @@
 import { API_URL, API_KEY } from "./config";
 
+const LIMIT_RESULTS = 25;
+
 /**
  * Function to search for a specific query
  * @param {string} query The query for the search
+ * @param {number} page The number of the page to get
  * @returns A Promise that result in an array of gif's objects
  */
-const searchGif = async query => {
+const searchGif = async (query = "random", page = 0) => {
   try {
-    query = query || "random";
     const response = await fetch(
-      `${API_URL}/gifs/search?api_key=${API_KEY}&q=${query}&limit=25&offset=0&rating=pg`
+      `${API_URL}/gifs/search?api_key=${API_KEY}&q=${query}&limit=${LIMIT_RESULTS}&offset=${
+        LIMIT_RESULTS * page
+      }&rating=pg`
     );
     const data = await response.json();
 
     localStorage.setItem("lastSearch", query);
-    
+
     const gifs = data.data.map(gif => {
       const { id, title } = gif;
-      //const { url } = gif.images.downsized_medium;
       const { url } = gif.images.fixed_height_downsampled;
 
       return { id, title, url };
@@ -41,6 +44,7 @@ const getGifByID = async gifID => {
     if (gif.data.length === 0) return {};
     const { title, id, images } = gif.data;
     const { url } = images.downsized_medium;
+
     return { title, id, url };
   } catch (e) {
     console.error(e);

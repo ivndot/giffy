@@ -16,7 +16,13 @@ function Home() {
         <p className="text-gray-800 text-xl font-serif pb-3 tracking-widest uppercase font-extralight">
           Last search:
         </p>
-        {loading ? <Loader size={90} /> : <GifsGrid gifs={gifs} />}
+        {loading ? (
+          <div className="w-full min-h-screen flex justify-center items-center">
+            <Loader size={90} />
+          </div>
+        ) : (
+          <GifsGrid gifs={gifs} />
+        )}
       </Container>
     </>
   );

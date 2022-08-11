@@ -2,6 +2,8 @@ import { useState, useEffect, useContext } from "react";
 import { GifsContext } from "../context/GifsContext";
 import { searchGif } from "../services/getGifs";
 
+const INITIAL_PAGE = 0;
+
 /**
  * Custom hook to get the gifs from the API
  * @param {string} query The query for the search
@@ -10,16 +12,27 @@ import { searchGif } from "../services/getGifs";
 function useSearchGifs(query) {
   const { gifs, setGifs } = useContext(GifsContext);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(INITIAL_PAGE);
+  const [loadingPage, setLoadingPage] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    searchGif(query).then(data => {
-      setGifs(data);
+    searchGif(query, page).then(gifs => {
+      setGifs(gifs);
       setLoading(false);
     });
   }, [query]);
 
-  return { gifs, loading };
+  useEffect(() => {
+    if (page === INITIAL_PAGE) return;
+    setLoadingPage(true);
+    searchGif(query, page).then(nextGifs => {
+      setGifs(prevGifs => prevGifs.concat(nextGifs));
+      setLoadingPage(false);
+    });
+  }, [page]);
+
+  return { gifs, loading, loadingPage, setPage };
 }
 
 export { useSearchGifs };

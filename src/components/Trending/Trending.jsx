@@ -11,7 +11,7 @@ function Trending() {
 
   return (
     <section className="w-full mt-11">
-      <p className="text-2xl font-semibold mb-3 text-center">Trending 🔥</p>
+      <p className="text-2xl font-semibold text-center">Trending 🔥</p>
       <div className="w-full p-6 flex flex-row flex-wrap justify-center">
         {trendingTerm.map((term, idx) => (
           <span key={idx}>

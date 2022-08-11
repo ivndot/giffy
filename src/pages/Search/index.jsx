@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "../../components/Button";
 import Container from "../../components/Container";
 import GifsGrid from "../../components/GifsGrid";
 import Loader from "../../components/Loader";
@@ -8,7 +9,11 @@ function Search({ params }) {
   let { query } = params;
   query = query || "random";
   // use custom hook to get the gifs from the API
-  const { gifs, loading } = useSearchGifs(query);
+  const { gifs, loading, loadingPage, setPage } = useSearchGifs(query);
+
+  const handlePagination = () => {
+    setPage(prevPage => prevPage + 1);
+  };
 
   if (!loading && gifs.length === 0)
     return (
@@ -21,14 +26,27 @@ function Search({ params }) {
 
   return (
     <Container>
-      {gifs.length > 0 && (
-        <p className="text-xl text-slate-700 py-3">
-          Results for search: <span className="font-bold">{decodeURI(query)}</span>
-        </p>
+      {loading ? (
+        <section className="w-full min-h-screen flex justify-center items-center">
+          <Loader size={90} />
+        </section>
+      ) : (
+        <>
+          <p className="text-xl text-slate-700 py-3">
+            Results for search: <span className="font-bold">{decodeURI(query)}</span>
+          </p>
+          <GifsGrid gifs={gifs} />
+          {loadingPage ? (
+            <section className="w-full flex justify-center py-5">
+              <Loader size={40} />
+            </section>
+          ) : (
+            <Button handleClick={handlePagination} content="Get more results" />
+          )}
+        </>
       )}
-      {loading ? <Loader size={90} /> : <GifsGrid gifs={gifs} />}
     </Container>
   );
 }
 
-export default Search;
+export default React.memo(Search);
