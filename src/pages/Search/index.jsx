@@ -15,38 +15,40 @@ function Search({ params }) {
     setPage(prevPage => prevPage + 1);
   };
 
-  if (!loading && gifs.length === 0)
-    return (
-      <Container>
-        <p className="text-center text-gray-600 text-2xl">
-          No gifs found for the search <span className="text-gray-800 font-semibold">{decodeURI(query)}</span>
-        </p>
-      </Container>
-    );
+  let renderComponent = null;
 
-  return (
-    <Container>
-      {loading ? (
-        <section className="w-full min-h-screen flex justify-center items-center">
-          <Loader size={90} />
-        </section>
-      ) : (
-        <>
-          <p className="text-xl text-slate-700 py-3">
-            Results for search: <span className="font-bold">{decodeURI(query)}</span>
-          </p>
-          <GifsGrid gifs={gifs} />
-          {loadingPage ? (
-            <section className="w-full flex justify-center py-5">
-              <Loader size={40} />
-            </section>
-          ) : (
+  if (!loading && gifs.length === 0) {
+    // there is no results for the search
+    renderComponent = (
+      <p className="text-center text-gray-600 text-2xl">
+        No gifs found for the search <span className="text-gray-800 font-semibold">{decodeURI(query)}</span>
+      </p>
+    );
+  } else {
+    renderComponent = loading ? (
+      <section className="w-full min-h-screen flex justify-center items-center">
+        <Loader size={90} />
+      </section>
+    ) : (
+      <>
+        <p className="text-xl text-slate-700 py-3">
+          Results for search: <span className="font-bold">{decodeURI(query)}</span>
+        </p>
+        <GifsGrid gifs={gifs} />
+        {loadingPage ? (
+          <section className="w-full flex justify-center py-5">
+            <Loader size={40} />
+          </section>
+        ) : (
+          <article className="flex justify-center">
             <Button handleClick={handlePagination} content="Get more results" />
-          )}
-        </>
-      )}
-    </Container>
-  );
+          </article>
+        )}
+      </>
+    );
+  }
+
+  return <Container>{renderComponent}</Container>;
 }
 
 export default React.memo(Search);
