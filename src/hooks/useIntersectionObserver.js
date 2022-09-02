@@ -1,10 +1,16 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
-function useIntersectionObserver(rootMargin = "50px", threshold = 0) {
-  const [show, setShow] = useState(false);
-  // define an element to observer
-  // use the ref of this component
-  const elementRef = useRef();
+/**
+ * Custom hook to observe an element and do whatever you want when the element is seen
+ * @param {string} rootMargin The margin in pixels to see the element
+ * @param {number} threshold The threshold of the element from `0` to `1`
+ * @param {any} fromRef The reference from the element to observe
+ * @param {boolean} once `true` to just observe the element once, `false` otherwise
+ * @returns An object containing if the element is near to screen
+ */
+function useIntersectionObserver(rootMargin = "50px", threshold = 0, fromRef = null, once = true) {
+  const [isNearScreen, setIsNearScreen] = useState(false);
+  const element = fromRef ? fromRef.current : fromRef;
 
   useEffect(() => {
     const onChangeIntersection = (entries, observer) => {
@@ -12,9 +18,11 @@ function useIntersectionObserver(rootMargin = "50px", threshold = 0) {
       if (element.isIntersecting) {
         // the element is intersecting
         // show the element
-        setShow(true);
-        // disable the observer
-        observer.disconnect();
+        setIsNearScreen(true);
+        // disable the observer if we want to observe only once
+        if (once) observer.disconnect();
+      } else {
+        if (!once) setIsNearScreen(false);
       }
     };
     // create an observer
@@ -22,11 +30,14 @@ function useIntersectionObserver(rootMargin = "50px", threshold = 0) {
       rootMargin,
       threshold
     });
-    // observe the element
-    observer.observe(elementRef.current);
-  }, []);
+    // observe the element if exists
+    if (element) {
+      observer.observe(element);
+      //console.log("observing...", element);
+    }
+  }, [rootMargin, threshold, element]);
 
-  return { elementRef, show };
+  return { isNearScreen };
 }
 
 export { useIntersectionObserver };

@@ -16,8 +16,7 @@ function useGif(gifID) {
     if (gifs.length > 0) {
       setSelectedGif(gifs.find(gif => gif.id === gifID));
       setLoading(false);
-    }
-    if (gifs.length === 0) {
+    } else if (gifs.length === 0) {
       getGifByID(gifID).then(gif => {
         setSelectedGif(gif);
         setLoading(false);

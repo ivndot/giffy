@@ -1,8 +1,8 @@
-import React from "react";
-import Button from "../../components/Button";
+import React, { useEffect, useRef, useCallback } from "react";
 import Container from "../../components/Container";
 import GifsGrid from "../../components/GifsGrid";
 import Loader from "../../components/Loader";
+import { useIntersectionObserver } from "../../hooks/useIntersectionObserver";
 import { useSearchGifs } from "../../hooks/useSearchGifs";
 
 function Search({ params }) {
@@ -10,10 +10,17 @@ function Search({ params }) {
   query = query || "random";
   // use custom hook to get the gifs from the API
   const { gifs, loading, loadingPage, setPage } = useSearchGifs(query);
+  // use custom hook to make infinite scroll
+  const elementRef = useRef();
+  const { isNearScreen } = useIntersectionObserver("100px", 0, loading ? null : elementRef, false);
 
-  const handlePagination = () => {
+  const handlePagination = useCallback(() => {
     setPage(prevPage => prevPage + 1);
-  };
+  }, []);
+
+  useEffect(() => {
+    if (isNearScreen) handlePagination();
+  }, [isNearScreen]);
 
   let renderComponent = null;
 
@@ -35,14 +42,12 @@ function Search({ params }) {
           Results for search: <span className="font-bold">{decodeURI(query)}</span>
         </p>
         <GifsGrid gifs={gifs} />
-        {loadingPage ? (
-          <section className="w-full flex justify-center py-5">
+        <div id="observe" ref={elementRef}></div>
+        {loadingPage && (
+          <section className="w-full flex flex-col items-center py-5">
+            <p>Loading...</p>
             <Loader size={40} />
           </section>
-        ) : (
-          <article className="flex justify-center">
-            <Button handleClick={handlePagination} content="Get more results" />
-          </article>
         )}
       </>
     );

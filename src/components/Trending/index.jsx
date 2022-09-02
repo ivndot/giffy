@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useRef } from "react";
 import { useIntersectionObserver } from "../../hooks/useIntersectionObserver";
 import Loader from "../Loader";
 
@@ -6,12 +6,28 @@ import Loader from "../Loader";
 const Trending = React.lazy(() => import("./Trending"));
 
 function LazyTrending() {
-  const { show, elementRef } = useIntersectionObserver();
+  const elementRef = useRef();
+  const { isNearScreen } = useIntersectionObserver("50px", 0, elementRef, true);
+  
   return (
-    <div ref={elementRef}>
-      <Suspense fallback={<Loader size={50} />}>{show ? <Trending /> : <Loader size={50} />}</Suspense>
-    </div>
+    <section ref={elementRef}>
+      <Suspense
+        fallback={
+          <div className="flex justify-center py-5">
+            <Loader size={50} />
+          </div>
+        }
+      >
+        {isNearScreen ? (
+          <Trending />
+        ) : (
+          <div className="flex justify-center py-5">
+            <Loader size={50} />
+          </div>
+        )}
+      </Suspense>
+    </section>
   );
 }
 
-export default React.memo(LazyTrending);
+export default LazyTrending;

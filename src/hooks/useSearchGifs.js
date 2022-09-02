@@ -17,7 +17,8 @@ function useSearchGifs(query) {
 
   useEffect(() => {
     setLoading(true);
-    searchGif(query, page).then(gifs => {
+    //console.log({ query });
+    searchGif(query.trim(), page).then(gifs => {
       setGifs(gifs);
       setLoading(false);
     });
@@ -26,7 +27,7 @@ function useSearchGifs(query) {
   useEffect(() => {
     if (page === INITIAL_PAGE) return;
     setLoadingPage(true);
-    searchGif(query, page).then(nextGifs => {
+    searchGif(query.trim(), page).then(nextGifs => {
       setGifs(prevGifs => prevGifs.concat(nextGifs));
       setLoadingPage(false);
     });

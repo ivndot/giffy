@@ -3,9 +3,10 @@ import { Link } from "wouter";
 import { getTrendingTerms } from "../../services/getGifs";
 
 function Trending() {
-  const [trendingTerm, setTrendingTerms] = useState([]);
+  const [trendingTerms, setTrendingTerms] = useState([]);
 
   useEffect(() => {
+    console.log("render trending");
     getTrendingTerms().then(topics => setTrendingTerms(topics));
   }, []);
 
@@ -13,12 +14,12 @@ function Trending() {
     <section className="w-full mt-11">
       <p className="text-2xl font-semibold text-center">Trending 🔥</p>
       <div className="w-full p-6 flex flex-row flex-wrap justify-center">
-        {trendingTerm.map((term, idx) => (
+        {trendingTerms.map((term, idx) => (
           <span key={idx}>
             <Link href={`/search/${term}`}>
               <a className="px-3 hover:underline ">{`${term}`}</a>
             </Link>
-            {idx !== trendingTerm.length - 1 && <span>•</span>}
+            {idx !== trendingTerms.length - 1 && <span>•</span>}
           </span>
         ))}
       </div>

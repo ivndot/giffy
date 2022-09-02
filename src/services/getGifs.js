@@ -15,16 +15,20 @@ const searchGif = async (query = "random", page = 0) => {
         LIMIT_RESULTS * page
       }&rating=pg`
     );
-    const data = await response.json();
+    const resp = await response.json();
 
-    localStorage.setItem("lastSearch", query);
-
-    const gifs = data.data.map(gif => {
+    const gifs = resp.data.map(gif => {
       const { id, title } = gif;
       const { url } = gif.images.fixed_height_downsampled;
 
       return { id, title, url };
     });
+
+    const lastSearch = {
+      query,
+      hasResults: gifs.length > 0 ? true : false
+    };
+    localStorage.setItem("lastSearch", JSON.stringify(lastSearch));
 
     return gifs;
   } catch (e) {
