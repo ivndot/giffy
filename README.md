@@ -1,2 +1,3 @@
 # Giffy
-Try the demo [here](www.google.com)
+
+Try the demo [here](https://giffy-ivndot.netlify.app/)
