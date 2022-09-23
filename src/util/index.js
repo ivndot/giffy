@@ -7,4 +7,19 @@ const isObjectEmpty = object => {
   return Object.keys(object).length === 0;
 };
 
-export { isObjectEmpty };
+const getCustomGifName = gifName => {
+  if (!/gif/gi.test(gifName)) return gifName;
+  const customName = gifName.split(/gif/gi)[0].split(/\s+/g, 3).join(" ");
+  return customName;
+};
+/*
+const pascalCasing = text => {
+  const words = text.split(/\s+/g);
+  let pascalText = "";
+  words.forEach((word, idx) => {
+    pascalText += word[0].toUpperCase() + word.substring(1) + (idx === words.length - 1 ? "" : " ");
+  });
+  return pascalText;
+};
+*/
+export { isObjectEmpty, getCustomGifName };
