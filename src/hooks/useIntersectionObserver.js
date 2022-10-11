@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 /**
- * Custom hook to observe an element and do whatever you want when the element is seen
+ * Custom hook to observe an element and do whatever you want when the element is near screen
  * @param {string} rootMargin The margin in pixels to see the element
  * @param {number} threshold The threshold of the element from `0` to `1`
  * @param {any} fromRef The reference from the element to observe
@@ -27,6 +27,7 @@ function useIntersectionObserver(rootMargin = "50px", threshold = 0, fromRef = n
     };
     // create an observer
     const observer = new IntersectionObserver(onChangeIntersection, {
+      root: null,
       rootMargin,
       threshold
     });

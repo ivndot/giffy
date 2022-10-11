@@ -5,7 +5,6 @@ import Home from "./pages/Home";
 import Search from "./pages/Search";
 import Detail from "./pages/Detail";
 import GifsProvider from "./context/GifsProvider";
-//import Footer from "./components/Footer";
 import FormSearch from "./components/FormSearch";
 
 function App() {
@@ -20,7 +19,6 @@ function App() {
         <Route path="/detail" component={Detail} />
         <Route path="/detail/:gifID" component={Detail} />
       </GifsProvider>
-      {/* <Footer /> */}
     </div>
   );
 }

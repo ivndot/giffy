@@ -41,7 +41,7 @@ function Detail({ params }) {
         <section className="flex flex-col items-center mb-12">
           <button className="self-start mb-4" onClick={() => window.history.back()}>
             <BackIcon color="#333333" />
-            <span className="inline text-gray-500 ml-2">Regresar</span>
+            <span className="inline text-gray-500 ml-2">Back</span>
           </button>
           <section className="w-full md:w-3/5">
             <Gif url={selectedGif.url} id={selectedGif.id} />
